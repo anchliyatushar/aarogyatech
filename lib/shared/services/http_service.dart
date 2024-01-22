@@ -1,18 +1,23 @@
 import 'dart:convert';
 
 import 'package:aarogyatech/shared/shared.dart';
+import 'package:aarogyatech/shared/utils/extensions/http_extension.dart';
 import 'package:http/http.dart' as http;
 
 class AppHttpService {
-  Future<Responser> get(String url) async {
+  Future<Responser> get(String url, {Map<String, dynamic>? parmas}) async {
     try {
-      final uri = Uri.tryParse(url);
+      var uri = Uri.tryParse(url);
 
       if (uri == null) {
         return Responser(isSuccess: false);
       }
 
       final response = await http.get(uri);
+
+      if (parmas?.isNotEmpty ?? false) {
+        uri = uri.copyWith(queryParameters: parmas);
+      }
 
       return _responserData(response);
     } catch (e) {
