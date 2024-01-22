@@ -43,8 +43,8 @@ class AppointmentRepo {
       final resp = await _httpService.get(
         AppointmentEndpoint.scheduleAppointmentEndpoint,
         parmas: {
-          'scheduled_date': date.formatDate('yyyy-mm-dd'),
-          'doctor_id': 135,
+          'scheduled_date': date.formatDate('yyyy-MM-DD'),
+          'doctor_id': '135',
         },
       );
 

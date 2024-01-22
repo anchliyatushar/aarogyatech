@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:aarogyatech/shared/shared.dart';
-import 'package:aarogyatech/shared/utils/extensions/http_extension.dart';
 import 'package:http/http.dart' as http;
 
 class AppHttpService {
@@ -13,11 +12,11 @@ class AppHttpService {
         return Responser(isSuccess: false);
       }
 
-      final response = await http.get(uri);
-
       if (parmas?.isNotEmpty ?? false) {
-        uri = uri.copyWith(queryParameters: parmas);
+        uri = uri.replace(queryParameters: parmas);
       }
+
+      final response = await http.get(uri);
 
       return _responserData(response);
     } catch (e) {
