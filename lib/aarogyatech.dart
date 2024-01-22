@@ -28,6 +28,11 @@ class AarogyaTech extends StatelessWidget {
     final theme = ThemeData(
       useMaterial3: true,
       scaffoldBackgroundColor: AppColors.whiteColor,
+      colorSchemeSeed: AppColors.blueColor,
+      datePickerTheme: const DatePickerThemeData(
+        backgroundColor: AppColors.whiteColor,
+        surfaceTintColor: AppColors.whiteColor,
+      ),
       textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
     );
 

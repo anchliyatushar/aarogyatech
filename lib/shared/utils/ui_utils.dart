@@ -47,7 +47,7 @@ class UIUtils {
   static BoxShadow get boxShadowLarge => BoxShadow(
         blurRadius: 24.r,
         offset: Offset(2.w, 4.h),
-        color: AppColors.black.withOpacity(0.04),
+        color: AppColors.black.withOpacity(0.09),
       );
   static BoxShadow get boxShadowLargeNegative => BoxShadow(
         blurRadius: 24.r,

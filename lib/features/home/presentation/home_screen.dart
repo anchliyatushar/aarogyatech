@@ -1,7 +1,8 @@
+import 'package:aarogyatech/features/appointment/appointment.dart';
 import 'package:aarogyatech/shared/shared.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,29 +15,30 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Image.asset('assets/home/gradient.png'),
-          ),
-          Container(
-            constraints: BoxConstraints(maxHeight: 320.h),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Image.asset(
-                'assets/home/doctor.png',
+      body: SlidingUpPanel(
+        borderRadius: BorderRadius.circular(32.r),
+        panel: _renderAllServicesSection(),
+        isDraggable: false,
+        defaultPanelState: PanelState.OPEN,
+        maxHeight: _getMaxHeight(),
+        body: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Image.asset('assets/home/gradient.png'),
+            ),
+            Container(
+              constraints: BoxConstraints(maxHeight: 310.h),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Image.asset(
+                  'assets/home/doctor.png',
+                ),
               ),
             ),
-          ),
-          _renderHomeTopBanner(),
-          Positioned(
-            left: 0,
-            right: 0,
-            top: 310.h,
-            child: _renderAllServicesSection(),
-          ),
-        ],
+            _renderHomeTopBanner(),
+          ],
+        ),
       ),
     );
   }
@@ -45,18 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 12.r,
-            offset: Offset(-2.w, -2.h),
-            color: AppColors.black.withOpacity(0.2),
-          )
-        ],
         color: AppColors.whiteColor,
-        borderRadius: BorderRadius.horizontal(
-          left: Radius.circular(20.r),
-          right: Radius.circular(20.r),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(40.r)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Text('Appointment', style: AppText.text16w700PrimaryColor),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AppointmentList()),
+                  );
+                },
                 child: Text(
                   'See All',
                   style: AppText.text14w700SecondaryButton,
@@ -76,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           SizedBox(height: 32.h),
-          Container()
+          const AppointmentCardWidget(),
         ],
       ),
     );
@@ -89,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _renderAppBar(),
+            const AppBarWidget(),
             SizedBox(height: 8.h),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,9 +117,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     size: 16.r,
                     color: AppColors.whiteColor,
                   ),
-                  label: 'Urgent Care',
-                  onTap: () {},
                   width: 160,
+                  label: 'Urgent Care',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ScheduleAppointmentScreen(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -132,22 +136,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _renderAppBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        CircleAvatar(
-          radius: 22.r,
-          backgroundImage: const CachedNetworkImageProvider(
-            'https://xsgames.co/randomusers/assets/avatars/male/76.jpg',
-          ),
-        ),
-        CircleAvatar(
-          radius: 22.r,
-          backgroundColor: AppColors.whiteColor,
-          child: const Icon(Icons.notifications_none_rounded),
-        ),
-      ],
-    );
+  double _getMaxHeight() {
+    final height = MediaQuery.sizeOf(context).height.h;
+    final halfHeight = height / 2;
+    if (halfHeight > 310.h) {
+      return halfHeight + 20.h;
+    }
+
+    return halfHeight;
   }
 }
