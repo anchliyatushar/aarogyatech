@@ -10,4 +10,14 @@ class AppointmentNotifier with ChangeNotifier {
   Future<Responser> bookAppointment(UserModel userModel) async {
     return appointmentRepo.bookAppointment(userModel);
   }
+
+  Future<Responser> scheduleAppointment(
+    ScheduledAppointmentModel appointmentModel,
+  ) {
+    return appointmentRepo.scheduleAppointment(appointmentModel);
+  }
+
+  Future<Responser> fetchAppointments(DateTime date) async {
+    return appointmentRepo.fetchAppointments(date);
+  }
 }

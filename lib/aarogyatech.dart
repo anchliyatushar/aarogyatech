@@ -1,12 +1,25 @@
+import 'package:aarogyatech/features/appointment/appointment.dart';
 import 'package:aarogyatech/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import 'features/home/home.dart';
 
-class AarogyaTech extends StatelessWidget {
+class AarogyaTech extends StatefulWidget {
   const AarogyaTech({super.key});
+
+  @override
+  State<AarogyaTech> createState() => _AarogyaTechState();
+}
+
+class _AarogyaTechState extends State<AarogyaTech> {
+  @override
+  void initState() {
+    super.initState();
+    AppUtils.setupLocator();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +28,17 @@ class AarogyaTech extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {
-        return MaterialApp(
-          title: 'Aarogya Tech',
-          theme: _buildTheme(),
-          home: const HomeScreen(),
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (_) => AppUtils.locator.get<AppointmentNotifier>(),
+            )
+          ],
+          child: MaterialApp(
+            title: 'Aarogya Tech',
+            theme: _buildTheme(),
+            home: const HomeScreen(),
+          ),
         );
       },
     );

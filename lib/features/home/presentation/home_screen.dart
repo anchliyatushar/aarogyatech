@@ -2,6 +2,7 @@ import 'package:aarogyatech/features/appointment/appointment.dart';
 import 'package:aarogyatech/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -120,12 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 160,
                   label: 'Urgent Care',
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ScheduleAppointmentScreen(),
-                      ),
-                    );
+                    _handleUrgetCare();
                   },
                 ),
               ],
@@ -144,5 +140,27 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return halfHeight;
+  }
+
+  void _handleUrgetCare() async {
+    context.showLoadingIndicator();
+
+    final resp = await context
+        .read<AppointmentNotifier>()
+        .fetchAppointments(DateTime.now());
+
+    context.removeLoadingIndicator();
+
+    if (!resp.isSuccess) {
+      context.showSnackbar(resp.message ?? '');
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const ScheduleAppointmentScreen(),
+      ),
+    );
   }
 }

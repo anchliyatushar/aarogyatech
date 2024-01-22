@@ -76,7 +76,7 @@ class AppButton extends StatelessWidget {
                 SizedBox(width: 8.w)
               } else ...{
                 if (isLoading) ...{
-                  // const AppLoaderIcon(),
+                  const CircularProgressIndicator(color: AppColors.whiteColor),
                   SizedBox(width: 8.w),
                 },
                 if (leftIcon != null) ...{leftIcon!, SizedBox(width: 10.w)},
@@ -149,7 +149,7 @@ class AppButton extends StatelessWidget {
                 SizedBox(width: 8.w)
               } else ...{
                 if (isLoading) ...{
-                  // const AppLoaderIcon(),
+                  const CircularProgressIndicator(color: AppColors.whiteColor),
                   SizedBox(width: 8.w),
                 },
                 if (leftIcon != null) ...{leftIcon!, SizedBox(width: 10.w)},
