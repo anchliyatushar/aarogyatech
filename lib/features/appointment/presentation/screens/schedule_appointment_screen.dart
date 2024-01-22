@@ -17,7 +17,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
   final lastDate = DateTime(
     DateTime.now().year,
     DateTime.now().month + 1,
-    DateTime.now().day + 1,
+    DateTime.now().day,
   );
 
   final listOfDays = <DateTime>[];

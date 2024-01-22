@@ -20,7 +20,7 @@ class AppHttpService {
     }
   }
 
-  Future<Responser> post(String url, Map<String, dynamic> data) async {
+  Future<Responser> post(String url, {Map<String, dynamic>? data}) async {
     try {
       final uri = Uri.tryParse(url);
 
