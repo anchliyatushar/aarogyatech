@@ -1,12 +1,16 @@
+import 'package:aarogyatech/features/appointment/appointment.dart';
 import 'package:aarogyatech/shared/shared.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:provider/provider.dart';
 
 class CreateUserAppointment extends StatefulWidget {
-  const CreateUserAppointment({super.key});
+  final AppointmentRequestModel data;
+
+  const CreateUserAppointment({super.key, required this.data});
 
   @override
   State<CreateUserAppointment> createState() => _CreateUserAppointmentState();
@@ -84,7 +88,7 @@ class _CreateUserAppointmentState extends State<CreateUserAppointment> {
             ),
             SizedBox(height: 16.h),
             Text(
-              'Appointment Details:',
+              'Dr. Tushar, ${widget.data.scheduledDate}, slotval',
               style: AppText.text12w400PrimaryColor,
             ),
           ],
@@ -134,13 +138,30 @@ class _CreateUserAppointmentState extends State<CreateUserAppointment> {
     );
   }
 
-  void _handleBookAppointment() {
+  void _handleBookAppointment() async {
     final state = _formKey.currentState;
+
     if (state == null) {
       return;
     }
 
     if (!state.validate()) {
+      return;
+    }
+
+    final data = UserModel(
+      fullName: 'fullName',
+      phone: 'phone',
+      gender: 'gender',
+    );
+
+    context.showLoadingIndicator();
+    final resp =
+        await context.read<AppointmentNotifier>().bookAppointment(data);
+    context.removeLoadingIndicator();
+
+    if (!resp.isSuccess) {
+      context.showSnackbar(resp.message ?? '');
       return;
     }
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:aarogyatech/shared/shared.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class AppHttpService {
@@ -32,10 +33,13 @@ class AppHttpService {
         return Responser(isSuccess: false);
       }
 
+      debugPrint(data.toString());
+
       final response = await http.post(uri, body: data);
 
       return _responserData(response);
     } catch (e) {
+      debugPrint(e.toString());
       return Responser(isSuccess: false, message: e.toString());
     }
   }

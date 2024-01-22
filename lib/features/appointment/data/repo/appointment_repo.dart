@@ -21,7 +21,7 @@ class AppointmentRepo {
   }
 
   Future<Responser> scheduleAppointment(
-    ScheduledAppointmentModel appointmentModel,
+    AppointmentRequestModel appointmentModel,
   ) async {
     try {
       final resp = await _httpService.post(
@@ -38,19 +38,29 @@ class AppointmentRepo {
     }
   }
 
-  Future<Responser> fetchAppointments(DateTime date) async {
+  Future<Responser<List<ScheduledAppointmentModel>>> fetchAppointments(
+    DateTime date,
+  ) async {
     try {
       final resp = await _httpService.get(
-        AppointmentEndpoint.scheduleAppointmentEndpoint,
+        AppointmentEndpoint.fetchAppointments,
         parmas: {
           'scheduled_date': date.formatDate('yyyy-MM-DD'),
           'doctor_id': '135',
         },
       );
 
+      final data = resp.data as List;
+
+      final formatedData = data
+          .map((e) =>
+              ScheduledAppointmentModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+
       return Responser(
         message: resp.message,
         isSuccess: resp.isSuccess,
+        data: formatedData,
       );
     } catch (e) {
       return Responser(isSuccess: false, message: 'Data Parsing Failed');

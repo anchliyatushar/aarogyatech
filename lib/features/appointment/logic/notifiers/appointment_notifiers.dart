@@ -12,12 +12,14 @@ class AppointmentNotifier with ChangeNotifier {
   }
 
   Future<Responser> scheduleAppointment(
-    ScheduledAppointmentModel appointmentModel,
+    AppointmentRequestModel appointmentModel,
   ) {
     return appointmentRepo.scheduleAppointment(appointmentModel);
   }
 
-  Future<Responser> fetchAppointments(DateTime date) async {
+  Future<Responser<List<ScheduledAppointmentModel>>> fetchAppointments(
+    DateTime date,
+  ) async {
     return appointmentRepo.fetchAppointments(date);
   }
 }

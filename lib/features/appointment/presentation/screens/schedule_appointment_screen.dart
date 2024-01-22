@@ -3,9 +3,15 @@ import 'package:aarogyatech/features/appointment/presentation/widgets/time_quadr
 import 'package:aarogyatech/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleAppointmentScreen extends StatefulWidget {
-  const ScheduleAppointmentScreen({super.key});
+  final List<ScheduledAppointmentModel> data;
+
+  const ScheduleAppointmentScreen({
+    super.key,
+    required this.data,
+  });
 
   @override
   State<ScheduleAppointmentScreen> createState() =>
@@ -24,6 +30,9 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
 
   final selectedIndex = ValueNotifier(0);
   final timeToggleValue = ValueNotifier([true, false]);
+
+  var _date = DateTime.now();
+  int? _timeSlot;
 
   @override
   void initState() {
@@ -72,6 +81,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                   _renderToggle(),
                 ],
               ),
+              SizedBox(height: 40.h),
               _renderTimeSlotSelection(),
               SizedBox(height: 40.h),
               _renderTimeSlots(),
@@ -166,6 +176,12 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
       firstDate: now,
       lastDate: lastDate,
     );
+
+    if (date == null) {
+      return;
+    }
+
+    _date = date;
   }
 
   void _getMonthList() {
@@ -178,7 +194,14 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
   }
 
   Widget _renderTimeSlotSelection() {
-    return const AppointmentQuadrantWidget();
+    return ValueListenableBuilder(
+      valueListenable: timeToggleValue,
+      builder: (_, val, __) {
+        return AppointmentHourList(
+          timeSlot: val[0] ? AppointmentSlotEnum.AM : AppointmentSlotEnum.PM,
+        );
+      },
+    );
   }
 
   Widget _renderTimeSlots() {
@@ -197,10 +220,30 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
     );
   }
 
-  void _handleScheduleAppointment() {
+  void _handleScheduleAppointment() async {
+    final data = AppointmentRequestModel(
+      doctorId: '148',
+      patientId: 'AR004',
+      status: 'scheduled',
+      createdOn: '',
+      createdBy: '1106',
+      scheduledDate: _date.formatDate('yyyy-MM-dd'),
+      slotValue: '77',
+    );
+
+    context.showLoadingIndicator();
+    final resp =
+        await context.read<AppointmentNotifier>().scheduleAppointment(data);
+    context.removeLoadingIndicator();
+
+    if (!resp.isSuccess) {
+      context.showSnackbar(resp.message ?? '');
+      return;
+    }
+
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const CreateUserAppointment()),
+      MaterialPageRoute(builder: (_) => CreateUserAppointment(data: data)),
     );
   }
 }

@@ -4,7 +4,7 @@ class AppointmentEndpoint {
 
   static const appointmentEndpoint = '${_baseUrl}create-patient';
 
-  static const scheduleAppointmentEndpoint = '$_baseUrl/';
+  static const scheduleAppointmentEndpoint = _baseUrl;
 
   static const fetchAppointments = _baseUrl;
 }
